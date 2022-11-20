@@ -8,7 +8,9 @@ const createTuit = (req, res) => {
     const tuitContent = req.body;
     tuitContent._id = (new Date()).getTime() + '';
     tuitContent.likes = "0";
-    tuitContent.liked = false;
+    tuitContent.dislikes = "0";
+    tuitContent.liked = "false";
+    tuitContent.disliked = "false";
     tuits.push(tuitContent);
     res.json(tuitContent);
 }
