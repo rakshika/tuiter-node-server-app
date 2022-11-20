@@ -6,8 +6,8 @@ const findTuits = (req, res) => {
 }
 const createTuit = (req, res) => {
     const tuitContent = req.body;
-    tuitContent._id = (new Date()).getTime() + ' ';
-    tuitContent.likes = 0;
+    tuitContent._id = (new Date()).getTime() + '';
+    tuitContent.likes = "0";
     tuitContent.liked = false;
     tuits.push(tuitContent);
     res.json(tuitContent);
@@ -18,14 +18,14 @@ const updateTuit = (req, res) => {
     const tuitIdToUpdate = req.params.tid;
     const updates = req.body;
     const tuitIndex = tuits.findIndex(
-        (t) => t._id == tuitIdToUpdate)
+        (t) => t._id === tuitIdToUpdate)
         tuits[tuitIndex] = {...tuits[tuitIndex], ...updates};
     res.sendStatus(200);
 }
 const deleteTuit = (req, res) => {
     const tuitdIdToDelete = req.params.tid;
     tuits = tuits.filter((t) =>
-                             t._id != tuitdIdToDelete);
+                             t._id !== tuitdIdToDelete);
     res.sendStatus(200);
 }
 
