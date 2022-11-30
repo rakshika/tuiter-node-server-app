@@ -1,34 +1,40 @@
-import posts from "./tuits.js";
-let tuits = posts;
+// import posts from "./tuits.js";
+// let tuits = posts;
+import * as tuitsDao from './tuits-dao.js'
 
-const findTuits = (req, res) => {
+const findTuits = async (req, res) => {
+    const tuits = await tuitsDao.findTuits()
     res.json(tuits);
 }
-const createTuit = (req, res) => {
-    const tuitContent = req.body;
-    tuitContent._id = (new Date()).getTime() + '';
-    tuitContent.likes = "0";
-    tuitContent.dislikes = "0";
-    tuitContent.liked = "false";
-    tuitContent.disliked = "false";
-    tuits.push(tuitContent);
-    res.json(tuitContent);
+
+const createTuit = async (req, res) => {
+    const newTuit = req.body;
+    newTuit.topic = "Space";
+    newTuit.time = "now";
+    newTuit.liked = false;
+    newTuit.likes = 0;
+    newTuit.replies = 0;
+    newTuit.retuits = 0;
+    newTuit.dislikes = 0;
+    newTuit.disliked = false;
+    newTuit.handle = "@nasa";
+    newTuit.userName = "NASA";
+    newTuit.image = "nasa.png";
+    const insertedTuit = await tuitsDao.createTuit(newTuit);
+    res.json(insertedTuit);
 }
-// in the json file, had to make id a string to get these working
-// or dont use !== or === since != or ==
-const updateTuit = (req, res) => {
+
+const updateTuit = async (req, res) => {
     const tuitIdToUpdate = req.params.tid;
     const updates = req.body;
-    const tuitIndex = tuits.findIndex(
-        (t) => t._id === tuitIdToUpdate)
-        tuits[tuitIndex] = {...tuits[tuitIndex], ...updates};
-    res.sendStatus(200);
+    const status = await tuitsDao.updateTuit(tuitIdToUpdate, updates);
+    res.json(status);
 }
-const deleteTuit = (req, res) => {
-    const tuitdIdToDelete = req.params.tid;
-    tuits = tuits.filter((t) =>
-                             t._id !== tuitdIdToDelete);
-    res.sendStatus(200);
+
+const deleteTuit = async (req, res) => {
+    const tuitIdToDelete = req.params.tid;
+    const status = await tuitsDao.deleteTuit(tuitIdToDelete);
+    res.json(status);
 }
 
 export default (app) => {
